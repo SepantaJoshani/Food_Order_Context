@@ -17,3 +17,5 @@ const CartProvider = (props) => {
     </CartContext.Provider>
   );
 };
+
+export default CartProvider
