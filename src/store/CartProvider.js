@@ -8,19 +8,19 @@ const initialState = {
 
 const cartReducer = (state, action) => {
   switch (action.type) {
-    case "ADD":
+    case "ADD": {
       const updatedTotalAmount =
         state.totalAmount + action.item.price * action.item.amount;
 
       const exisitngItemIndex = state.items.findIndex(
         (item) => item.id === action.item.id
       );
-      const exsitingItem = state.items[exisitngItemIndex];
+      const existingItem = state.items[exisitngItemIndex];
       let updatedItems;
-      if (exsitingItem) {
+      if (existingItem) {
         const updatedItem = {
-          ...exsitingItem,
-          amount: exsitingItem.amount + action.item.amount,
+          ...existingItem,
+          amount: existingItem.amount + action.item.amount,
         };
         updatedItems = [...state.items];
         updatedItems[exisitngItemIndex] = updatedItem;
@@ -32,6 +32,34 @@ const cartReducer = (state, action) => {
         items: updatedItems,
         totalAmount: updatedTotalAmount,
       };
+    }
+
+    case "REMOVE": {
+      const exisitngItemIndex = state.items.findIndex(
+        (item) => item.id === action.id
+      );
+      const existingItem = state.items[exisitngItemIndex];
+      const updatedTotalAmount = state.totalAmount - existingItem.price;
+
+      let updatedItems;
+
+      if (existingItem.amount === 1) {
+        updatedItems = state.items.filter((item) => item.id !== action.id);
+      } else {
+        const updatedItem = {
+          ...existingItem,
+          amount: existingItem.amount - 1,
+        };
+        updatedItems = [...state.items];
+        updatedItems[exisitngItemIndex] = updatedItem;
+      }
+
+      return {
+        items: updatedItems,
+        totalAmount: updatedTotalAmount,
+      };
+    }
+
     default:
       return initialState;
   }
